@@ -93,10 +93,10 @@ states:
     action:
       - name: triviaStickerSmile
       - name: triviaFirstDinnerCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       firstMovie:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   firstDinnerWrong:
     action:
       - name: triviaFirstDinnerTemplate
@@ -124,10 +124,10 @@ states:
     action:
       - name: triviaStickerTwoThumbs
       - name: triviaFirstMovieCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       confess:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   firstMovieWrong:
     action:
       - name: triviaFirstMovieTemplate
@@ -155,10 +155,10 @@ states:
     action:
       - name: triviaStickerAdore
       - name: triviaConfessCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       bonusOne:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   confessWrong:
     action:
       - name: triviaConfessTemplate
@@ -197,10 +197,10 @@ states:
     action:
       - name: triviaStickerThumb
       - name: triviaMostFunCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       firstGeka:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   mostFunWrong:
     action:
       - name: triviaMostFunTemplate
@@ -228,10 +228,10 @@ states:
     action:
       - name: triviaStickerKedip
       - name: triviaFirstGekaCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       favoriteGame:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   firstGekaWrong:
     action:
       - name: triviaFirstGekaTemplate
@@ -259,10 +259,10 @@ states:
     action:
       - name: triviaStickerAdore
       - name: triviaFavoriteGameCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       bonusTwo:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   favoriteGameWrong:
     action:
       - name: triviaFavoriteGameTemplate
@@ -301,10 +301,10 @@ states:
     action:
       - name: triviaStickerLove
       - name: triviaRomanticDinnerCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       bestMoment:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   romanticDinnerWrong:
     action:
       - name: triviaRomanticDinnerTemplate
@@ -332,10 +332,10 @@ states:
     action:
       - name: triviaStickerHappy
       - name: triviaBestMomentCorrect
-      - name: reenter
+      - name: triviaContinue
     transitions:
       bestPhoto:
-        fallback: true
+        condition: "intent == 'triviaContinue'"
   bestMomentWrong:
     action:
       - name: triviaBestMomentTemplate
@@ -388,7 +388,7 @@ actions:
     options:
       type: button
       items:
-        text: "Geku lanjut ya ke pertanyaan berikutnya... :)"
+        text: "Geku lanjut ya... :)"
         actions:
           - type: postback
             label: 'Lanjut'
@@ -555,7 +555,7 @@ actions:
   triviaFirstDinnerCorrect:
     type: text
     options:
-      text: 'Yess jawaban kamu benar Geca, Geka inget banget waktu makan bareng pertama kali dulu sama kamu di Kenny Rogers, pesan grilled chicken enak. Geku lanjut ya.'
+      text: 'Yess jawaban kamu benar Geca, Geka inget banget waktu makan bareng pertama kali dulu sama kamu di Kenny Rogers, pesan grilled chicken enak'
 
   triviaFirstMovieQuestion:
     type: text
@@ -627,7 +627,7 @@ actions:
   triviaConfessCorrect:
     type: text
     options:
-      text: 'Ah senangnya Geku kalau Geca ingat sama tanggalnya, Geka waktu itu perlu waktu lumayan banyak buat bikinin kamu game dan website-nya <3'
+      text: 'Ah senangnya Geku kalau Geca ingat sama tanggalnya, Geka waktu itu perlu kerja keras buat bikinin kamu game dan website-nya <3'
 
   triviaBonusOne:
     type: template
@@ -656,7 +656,7 @@ actions:
         items:
             - text: 'Bermain di Dunia Fantasi'
               title: 'Dunia Fantasi'
-              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/dufan.jpg'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/dufan.jpeg'
               actions:
                 - type: "postback"
                   label: 'Dufan'
@@ -665,7 +665,7 @@ actions:
                     place: dufan
             - text: 'Melihat ikan di Seaworld'
               title: 'Seaworld'
-              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/seaworld.jpg'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/seaworld.png'
               actions:
                 - type: "postback"
                   label: 'Seaworld'
@@ -725,7 +725,7 @@ actions:
   triviaFirstGekaCorrect:
     type: text
     options:
-      text: 'Yayyy, jawaban kamu benar Geca, Geku senang sekali. Nama kalian unik banget, sama-sama GK hehe. Geku seneng banget liatnya, kalian sepertinya sudah ditakdirkan bersama sejak lahir'
+      text: 'Yayyy, jawaban kamu benar Geca, Geku senang sekali. Nama kalian unik banget, sama-sama GK hehe. Geku seneng banget liatnya, kalian seperti sudah ditakdirkan bersama sejak lahir'
 
   triviaFavoriteGameQuestion:
     type: text
@@ -766,7 +766,7 @@ actions:
   triviaFavoriteGameCorrect:
     type: text
     options:
-      text: 'Horeee jawaban kamu benar Geca! Dulu kamu dan Geka hampir setiap malam bermain permainan Mancala. Geka terkesan banget waktu kamu menang terus seneng banget sampai dipost ke Path, ah time flies so much ya :('
+      text: 'Horeee jawaban kamu benar Geca! Dulu waktu di Cornell, kamu dan Geka hampir setiap malam bermain permainan Mancala. Geka terkesan banget waktu kamu menang terus seneng banget sampai dipost ke Path, ah time flies so much ya :('
 
   triviaRomanticDinnerQuestion:
     type: text
@@ -839,7 +839,7 @@ actions:
   triviaBestMomentCorrect:
     type: text
     options:
-      text: 'Yayyy, benar Geca! Momen paling berharga buat Geka di tahun ini adalah menghabiskan detik-detik pergantian tahun bersama kamu, bersama orang yang paling istimewa'
+      text: 'Yayyy, benar Geca! Momen paling berharga buat Geka di tahun ini adalah menghabiskan detik-detik awal tahun bersama kamu, bersama orang yang paling teristimewa'
 
   triviaBestPhotoQuestion:
     type: text
