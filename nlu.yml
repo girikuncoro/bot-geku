@@ -27,6 +27,8 @@ trivia:
                 - oke
                 - ayo
                 - siap bermain
+                - ya
+                - iya
 
 triviaDummy:
     type: regex

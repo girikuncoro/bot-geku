@@ -1,7 +1,7 @@
 schema: kata.ai/schema/kata-ml/1.0
 name: ghaitsa-bot
 desc: Bot Description
-version: 0.0.100
+version: 0.0.106
 flows:
     welcome: $include(./flows/welcome.yml)
     fallback: $include(./flows/fallback.yml)

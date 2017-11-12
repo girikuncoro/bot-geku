@@ -388,7 +388,7 @@ actions:
     options:
       type: button
       items:
-        text: "Geku lanjut ya... :)"
+        text: "Geku lanjut ya..."
         actions:
           - type: postback
             label: 'Lanjut'
@@ -406,7 +406,7 @@ actions:
   triviaBonusPoint:
     type: text
     options:
-      text: 'Selamat Geca, kamu sudah jawab 3 pertanyaan. Geku kasih bonus ya (happy)'
+      text: 'Selamat Geca, kamu sudah jawab 3 pertanyaan. Geku kasih bonus ya :)'
 
   triviaStickerCongrats:
     type: template
@@ -634,16 +634,16 @@ actions:
     options:
       type: image
       items:    
-            originalContentUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
-            previewImageUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+            originalContentUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk-mozaic.jpg'
+            previewImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk-mozaic-thumb.jpg'
 
   triviaBonusTwo:
     type: template
     options:
       type: image
       items:    
-            originalContentUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
-            previewImageUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+            originalContentUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk-anime.jpg'
+            previewImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk-anime-thumb.jpg'
 
   triviaMostFunQuestion:
     type: text
