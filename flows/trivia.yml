@@ -1,0 +1,896 @@
+intents:
+  startTrivia:
+    initial: true
+    type: text
+    classifier:
+      nlu: trivia
+      match: triviaReady
+  firstDinnerCorrect:
+    initial: true
+    type: data
+    condition: "payload.type == 'dinner' && payload.dinner == 'kenny'"
+  firstDinnerWrong:
+    initial: true
+    type: data
+    condition: "payload.dinner == 'shaburi' || payload.dinner == 'leko'"
+  firstMovieCorrect:
+    initial: true
+    type: data
+    condition: "payload.type == 'movie' && payload.movie == 'surga'"
+  firstMovieWrong:
+    initial: true
+    type: data
+    condition: "payload.movie == 'bulan' || payload.movie == 'aadc2'"
+  confessCorrect:
+    type: data
+    condition: "payload.type == 'date' && payload.date == '1 Januari'"
+  confessWrong:
+    type: data
+    condition: "payload.date == '2 Januari' || payload.date == '3 Januari'"
+  mostFunCorrect:
+    type: data
+    condition: "payload.type == 'place' && payload.place == 'dufan'"
+  mostFunWrong:
+    type: data
+    condition: "payload.place == 'seaworld' || payload.place == 'monas'"
+  firstGekaCorrect:
+    type: data
+    condition: "payload.type == 'geka' && payload.geka == 'cornell'"
+  firstGekaWrong:
+    type: data
+    condition: "payload.geka == 'jam' || payload.geka == 'rumah'"
+  favoriteGameCorrect:
+    type: data
+    condition: "payload.type == 'game' && payload.game == 'mancala'"
+  favoriteGameWrong:
+    type: data
+    condition: "payload.game == 'chess' || payload.game == 'card'"
+  romanticDinnerCorrect:
+    type: data
+    condition: "payload.romdinner == 'skye' || payload.romdinner == 'segarra'"
+  romanticDinnerWrong:
+    type: data
+    condition: "payload.romdinner == 'igabakar'"
+  bestMomentCorrect:
+    type: data
+    condition: "payload.type == 'moment' && payload.moment == 'newyear'"
+  bestMomentWrong:
+    type: data
+    condition: "payload.moment == 'martabak'"
+  bestPhotoCorrect:
+    type: data
+    condition: "payload.type == 'photo'"
+  triviaContinue:
+    type: data
+    condition: "payload.type == 'continue' && payload.continue == 'lanjut'"
+  reenter:
+    type: command
+    condition: content == "reenter"
+
+states:
+  init:
+    initial: true
+    transitions:
+      firstDinner:
+        condition: "intent == 'startTrivia'"
+      init:
+        fallback: true
+
+  firstDinner:
+    action:
+      - name: triviaFirstDinnerTemplate
+      - name: triviaWelcome
+      - name: triviaFirst
+      - name: triviaFirstDinnerQuestion
+    transitions:
+      firstDinnerCorrect:
+        condition: "intent == 'firstDinnerCorrect'"
+      firstDinnerWrong:
+        condition: "intent == 'firstDinnerWrong'"
+      firstDinner:
+        fallback: true
+  firstDinnerCorrect:
+    action:
+      - name: triviaStickerSmile
+      - name: triviaFirstDinnerCorrect
+      - name: reenter
+    transitions:
+      firstMovie:
+        fallback: true
+  firstDinnerWrong:
+    action:
+      - name: triviaFirstDinnerTemplate
+      - name: triviaWrongAnswer
+      - name: triviaFirstDinnerQuestion
+    transitions:
+      firstDinnerCorrect:
+        condition: "intent == 'firstDinnerCorrect'"
+      firstDinnerWrong:
+        condition: "intent == 'firstDinnerWrong'"
+
+  firstMovie:
+    action:
+      - name: triviaFirstMovieTemplate
+      - name: triviaSecond
+      - name: triviaFirstMovieQuestion
+    transitions:
+      firstMovieCorrect:
+        condition: "intent == 'firstMovieCorrect'"
+      firstMovieWrong:
+        condition: "intent == 'firstMovieWrong'"
+      firstMovie:
+        fallback: true
+  firstMovieCorrect:
+    action:
+      - name: triviaStickerTwoThumbs
+      - name: triviaFirstMovieCorrect
+      - name: reenter
+    transitions:
+      confess:
+        fallback: true
+  firstMovieWrong:
+    action:
+      - name: triviaFirstMovieTemplate
+      - name: triviaWrongAnswer
+      - name: triviaFirstMovieQuestion
+    transitions:
+      firstMovieCorrect:
+        condition: "intent == 'firstMovieCorrect'"
+      firstMovieWrong:
+        condition: "intent == 'firstMovieWrong'"
+
+  confess:
+    action:
+      - name: triviaConfessTemplate
+      - name: triviaThird
+      - name: triviaConfessQuestion
+    transitions:
+      confessCorrect:
+        condition: "intent == 'confessCorrect'"
+      confessWrong:
+        condition: "intent == 'confessWrong'"
+      confess:
+        fallback: true
+  confessCorrect:
+    action:
+      - name: triviaStickerAdore
+      - name: triviaConfessCorrect
+      - name: reenter
+    transitions:
+      bonusOne:
+        fallback: true
+  confessWrong:
+    action:
+      - name: triviaConfessTemplate
+      - name: triviaWrongAnswer
+      - name: triviaConfessQuestion
+    transitions:
+      confessCorrect:
+        condition: "intent == 'confessCorrect'"
+      confessWrong:
+        condition: "intent == 'confessWrong'"
+  
+  bonusOne:
+    action:
+      - name: triviaBonusPoint
+      - name: triviaBonusOne
+      - name: triviaContinue
+    transitions:
+      mostFun:
+        condition: "intent == 'triviaContinue'"
+      bonusOne:
+        fallback: true
+
+  mostFun:
+    action:
+      - name: triviaMostFunTemplate
+      - name: triviaFourth
+      - name: triviaMostFunQuestion
+    transitions:
+      mostFunCorrect:
+        condition: "intent == 'mostFunCorrect'"
+      mostFunWrong:
+        condition: "intent == 'mostFunWrong'"
+      mostFun:
+        fallback: true
+  mostFunCorrect:
+    action:
+      - name: triviaStickerThumb
+      - name: triviaMostFunCorrect
+      - name: reenter
+    transitions:
+      firstGeka:
+        fallback: true
+  mostFunWrong:
+    action:
+      - name: triviaMostFunTemplate
+      - name: triviaWrongAnswer
+      - name: triviaMostFunQuestion
+    transitions:
+      mostFunCorrect:
+        condition: "intent == 'mostFunCorrect'"
+      mostFunWrong:
+        condition: "intent == 'mostFunWrong'"
+
+  firstGeka:
+    action:
+      - name: triviaFirstGekaTemplate
+      - name: triviaFifth
+      - name: triviaFirstGekaQuestion
+    transitions:
+      firstGekaCorrect:
+        condition: "intent == 'firstGekaCorrect'"
+      firstGekaWrong:
+        condition: "intent == 'firstGekaWrong'"
+      firstGeka:
+        fallback: true
+  firstGekaCorrect:
+    action:
+      - name: triviaStickerKedip
+      - name: triviaFirstGekaCorrect
+      - name: reenter
+    transitions:
+      favoriteGame:
+        fallback: true
+  firstGekaWrong:
+    action:
+      - name: triviaFirstGekaTemplate
+      - name: triviaWrongAnswer
+      - name: triviaFirstGekaQuestion
+    transitions:
+      firstGekaCorrect:
+        condition: "intent == 'firstGekaCorrect'"
+      firstGekaWrong:
+        condition: "intent == 'firstGekaWrong'"
+
+  favoriteGame:
+    action:
+      - name: triviaFavoriteGameTemplate
+      - name: triviaSixth
+      - name: triviaFavoriteGameQuestion
+    transitions:
+      favoriteGameCorrect:
+        condition: "intent == 'favoriteGameCorrect'"
+      favoriteGameWrong:
+        condition: "intent == 'favoriteGameWrong'"
+      favoriteGame:
+        fallback: true
+  favoriteGameCorrect:
+    action:
+      - name: triviaStickerAdore
+      - name: triviaFavoriteGameCorrect
+      - name: reenter
+    transitions:
+      bonusTwo:
+        fallback: true
+  favoriteGameWrong:
+    action:
+      - name: triviaFavoriteGameTemplate
+      - name: triviaWrongAnswer
+      - name: triviaFavoriteGameQuestion
+    transitions:
+      favoriteGameCorrect:
+        condition: "intent == 'favoriteGameCorrect'"
+      favoriteGameWrong:
+        condition: "intent == 'favoriteGameWrong'"
+
+  bonusTwo:
+    action:
+      - name: triviaBonusPoint
+      - name: triviaBonusTwo
+      - name: triviaContinue
+    transitions:
+      romanticDinner:
+        condition: "intent == 'triviaContinue'"
+      bonusTwo:
+        fallback: true
+
+  romanticDinner:
+    action:
+      - name: triviaRomanticDinnerTemplate
+      - name: triviaSeventh
+      - name: triviaRomanticDinnerQuestion
+    transitions:
+      romanticDinnerCorrect:
+        condition: "intent == 'romanticDinnerCorrect'"
+      romanticDinnerWrong:
+        condition: "intent == 'romanticDinnerWrong'"
+      romanticDinner:
+        fallback: true
+  romanticDinnerCorrect:
+    action:
+      - name: triviaStickerLove
+      - name: triviaRomanticDinnerCorrect
+      - name: reenter
+    transitions:
+      bestMoment:
+        fallback: true
+  romanticDinnerWrong:
+    action:
+      - name: triviaRomanticDinnerTemplate
+      - name: triviaWrongAnswer
+      - name: triviaRomanticDinnerQuestion
+    transitions:
+      romanticDinnerCorrect:
+        condition: "intent == 'romanticDinnerCorrect'"
+      romanticDinnerWrong:
+        condition: "intent == 'romanticDinnerWrong'"
+
+  bestMoment:
+    action:
+      - name: triviaBestMomentTemplate
+      - name: triviaEighth
+      - name: triviaBestMomentQuestion
+    transitions:
+      bestMomentCorrect:
+        condition: "intent == 'bestMomentCorrect'"
+      bestMomentWrong:
+        condition: "intent == 'bestMomentWrong'"
+      bestMoment:
+        fallback: true
+  bestMomentCorrect:
+    action:
+      - name: triviaStickerHappy
+      - name: triviaBestMomentCorrect
+      - name: reenter
+    transitions:
+      bestPhoto:
+        fallback: true
+  bestMomentWrong:
+    action:
+      - name: triviaBestMomentTemplate
+      - name: triviaWrongAnswer
+      - name: triviaBestMomentQuestion
+    transitions:
+      bestMomentCorrect:
+        condition: "intent == 'bestMomentCorrect'"
+      bestMomentWrong:
+        condition: "intent == 'bestMomentWrong'"
+
+  bestPhoto:
+    action:
+      - name: triviaBestPhotoTemplate
+      - name: triviaNinth
+      - name: triviaBestPhotoQuestion
+    transitions:
+      bestPhotoCorrect:
+        condition: "intent == 'bestPhotoCorrect'"
+      bestPhotoWrong:
+        condition: "intent == 'bestPhotoWrong'"
+      bestPhoto:
+        fallback: true
+  bestPhotoCorrect:
+    action:
+      - name: triviaBestPhotoCorrect
+      - name: triviaStickerBlush
+      - name: triviaCongrats
+    transitions:
+      bestPhotoCorrect:
+        fallback: true
+  bestPhotoWrong:
+    action:
+      - name: triviaBestPhotoTemplate
+      - name: triviaWrongAnswer
+      - name: triviaBestPhotoQuestion
+    transitions:
+      bestPhotoCorrect:
+        condition: "intent == 'bestPhotoCorrect'"
+      bestPhotoWrong:
+        condition: "intent == 'bestPhotoWrong'"
+
+actions:
+  triviaWelcome:
+    type: text
+    options:
+      text: 'Makasih Geca, sudah mau bermain bersama Geku :) Ayo kita mulai'
+  triviaContinue:
+    type: template
+    options:
+      type: button
+      items:
+        text: "Geku lanjut ya ke pertanyaan berikutnya... :)"
+        actions:
+          - type: postback
+            label: 'Lanjut'
+            payload:
+              type: continue
+              continue: "lanjut"
+  triviaWrongAnswer:
+    type: text
+    options:
+      text: 'Geku rasa jawabannya bukan $(payload.dinner)$(payload.date)$(payload.place)$(payload.geka)$(payload.movie)$(payload.game)$(payload.romdinner)$(payload.moment) Geca, dicoba lagi :)'
+  triviaCongrats:
+    type: text
+    options:
+      text: 'Selamat Geca, kamu sudah menyelesaikan semua pertanyaan! Pejamkan mata kamu, Geka akan memberikan kamu kejutan super yang sudah disiapkannya dari bulan September lalu :)'
+  triviaBonusPoint:
+    type: text
+    options:
+      text: 'Selamat Geca, kamu sudah jawab 3 pertanyaan. Geku kasih bonus ya (happy)'
+
+  triviaStickerCongrats:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '4'
+        packageId: '1'
+  triviaStickerKedip:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '134'
+        packageId: '1'
+  triviaStickerThumb:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '13'
+        packageId: '1'
+  triviaStickerSmile:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '2'
+        packageId: '1'
+  triviaStickerPunch:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '114'
+        packageId: '1'
+  triviaStickerTwoThumbs:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '125'
+        packageId: '1'
+  triviaStickerAdore:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '137'
+        packageId: '1'
+  triviaStickerLove:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '410'
+        packageId: '1'
+  triviaStickerHappy:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '407'
+        packageId: '1'
+  triviaStickerBlush:
+    type: template
+    options:
+      type: sticker
+      items:
+        stickerId: '5'
+        packageId: '1'
+
+  triviaFirst:
+    type: text
+    options:
+      text: 'Pertanyaan pertama'
+  triviaSecond:
+    type: text
+    options:
+      text: 'Pertanyaan kedua'
+  triviaThird:
+    type: text
+    options:
+      text: 'Pertanyaan ketiga'
+  triviaFourth:
+    type: text
+    options:
+      text: 'Pertanyaan keempat'
+  triviaFifth:
+    type: text
+    options:
+      text: 'Pertanyaan kelima'
+  triviaSixth:
+    type: text
+    options:
+      text: 'Pertanyaan keenam'
+  triviaSeventh:
+    type: text
+    options:
+      text: 'Pertanyaan ketujuh'
+  triviaEighth:
+    type: text
+    options:
+      text: 'Pertanyaan kedelapan'
+  triviaNinth:
+    type: text
+    options:
+      text: 'Pertanyaan kesembilan'
+
+  triviaFirstDinnerQuestion:
+    type: text
+    options:
+      text: 'Apa kamu tau dimana tempat Geka dan Geca makan malam pertama kali? Pilih pilihan di atas ini.'
+  triviaFirstDinnerTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Di Shaburi Grand Indonesia'
+              title: 'Shaburi'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/shaburi.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Shaburi'
+                  payload:
+                    type: dinner
+                    dinner: shaburi
+            - text: 'Di Kenny Rogers BXC Bintaro'
+              title: 'Kenny Rogers'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/kenny.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Kenny Rogers'
+                  payload: 
+                    type: dinner
+                    dinner: kenny
+            - text: 'Di Iga Penyet Leko BXC Binatro'
+              title: 'Iga Penyet Leko'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/leko.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Leko'
+                  payload: 
+                    type: dinner
+                    dinner: leko
+  triviaFirstDinnerCorrect:
+    type: text
+    options:
+      text: 'Yess jawaban kamu benar Geca, Geka inget banget waktu makan bareng pertama kali dulu sama kamu di Kenny Rogers, pesan grilled chicken enak. Geku lanjut ya.'
+
+  triviaFirstMovieQuestion:
+    type: text
+    options:
+      text: 'Apa kamu masih ingat film terakhir yang Geka dan Geca tonton bersama? Pilih pilihan di atas ini.'
+  triviaFirstMovieTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Film Surga Yang Tak Dirindukan 2'
+              title: 'Surga Yang Tak Dirindukan 2'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/surga.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Surga'
+                  payload:
+                    type: movie
+                    movie: surga
+            - text: 'Film Bulan Terbelah di Langit Amerika 2'
+              title: 'Bulan Terbelah di Langit Amerika 2'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/bulan.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Bulan'
+                  payload: 
+                    type: movie
+                    movie: bulan
+            - text: 'Film Ada Apa Dengan Cinta 2'
+              title: 'Ada Apa Dengan Cinta 2'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/aadc2.jpg'
+              actions:
+                - type: "postback"
+                  label: 'AADC2'
+                  payload: 
+                    type: movie
+                    movie: aadc2
+  triviaFirstMovieCorrect:
+    type: text
+    options:
+      text: 'Horeee jawaban kamu benar Geca. Geka suka banget sama film ini, bukan karena filmnya tapi karena wanita di sampingnya. <3'
+
+  triviaConfessQuestion:
+    type: text
+    options:
+      text: 'Apa kamu masih ingat kapan Geka menyatakan cintanya pada Geca?'
+  triviaConfessTemplate:
+    type: template
+    options:
+      type: button
+      items:
+        text: "Pilih pilihan di bawah ini."
+        actions:
+          - type: postback
+            label: '1 Januari 2016'
+            payload:
+              type: date
+              date: "1 Januari"
+          - type: postback
+            label: '2 Januari 2016'
+            payload:
+              type: date
+              date: "2 Januari"
+          - type: postback
+            label: '3 Januari 2016'
+            payload:
+              type: date
+              date: "3 Januari"
+  triviaConfessCorrect:
+    type: text
+    options:
+      text: 'Ah senangnya Geku kalau Geca ingat sama tanggalnya, Geka waktu itu perlu waktu lumayan banyak buat bikinin kamu game dan website-nya <3'
+
+  triviaBonusOne:
+    type: template
+    options:
+      type: image
+      items:    
+            originalContentUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+            previewImageUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+
+  triviaBonusTwo:
+    type: template
+    options:
+      type: image
+      items:    
+            originalContentUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+            previewImageUrl: 'https://visualhunt.com/photos/s/7/adult-silhouette-love.jpg'
+
+  triviaMostFunQuestion:
+    type: text
+    options:
+      text: 'Mana tempat kencan yang paling menyenangkan buat Geka dan Geca? Pilih pilihan di atas ini.'
+  triviaMostFunTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Bermain di Dunia Fantasi'
+              title: 'Dunia Fantasi'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/dufan.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Dufan'
+                  payload:
+                    type: place
+                    place: dufan
+            - text: 'Melihat ikan di Seaworld'
+              title: 'Seaworld'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/seaworld.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Seaworld'
+                  payload: 
+                    type: place
+                    place: seaworld
+            - text: 'Jogging bersama di Monas'
+              title: 'Monas'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/monas.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Monas'
+                  payload: 
+                    type: place
+                    place: monas
+  triviaMostFunCorrect:
+    type: text
+    options:
+      text: 'Horeee benar! Geka seneng banget waktu main sama Geca di Dufan, waktu itu istana bonekanya seru banget, tapi sayang wahana perang bintangnya banyak yang rusak'
+
+  triviaFirstGekaQuestion:
+    type: text
+    options:
+      text: 'Geka sering ngasih kamu tulisan GK yang sweet sejak pertama kali kenal sampai sekarang, yang mana tulisan yang pertama kali banget dia kasih dulu? Pilih pilihan di atas ini.'
+  triviaFirstGekaTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'GK di jam gadang Cornell'
+              title: 'Jam Gadang'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/4.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Jam Gadang'
+                  payload:
+                    type: geka
+                    geka: jam
+            - text: 'GK di salju depan rumah Ithaca'
+              title: 'Salju rumah Ithaca'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/11-1.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Rumah'
+                  payload: 
+                    type: geka
+                    geka: rumah
+            - text: 'GK di lapangan Cornell'
+              title: 'Lapangan Cornell'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/1.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Cornell'
+                  payload: 
+                    type: geka
+                    geka: cornell
+  triviaFirstGekaCorrect:
+    type: text
+    options:
+      text: 'Yayyy, jawaban kamu benar Geca, Geku senang sekali. Nama kalian unik banget, sama-sama GK hehe. Geku seneng banget liatnya, kalian sepertinya sudah ditakdirkan bersama sejak lahir'
+
+  triviaFavoriteGameQuestion:
+    type: text
+    options:
+      text: 'Permainan apa yang dulu suka dimainkan sama Geka dan Geca sewaktu pdkt? Pilih pilihan di atas ini.'
+  triviaFavoriteGameTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Permainan Kartu Poker'
+              title: 'Permainan Kartu Poker'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/card.jpeg'
+              actions:
+                - type: "postback"
+                  label: 'Kartu'
+                  payload:
+                    type: game
+                    game: card
+            - text: 'Permainan Catur'
+              title: 'Permainan Catur'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/ChessSet.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Catur'
+                  payload: 
+                    type: game
+                    game: chess
+            - text: 'Permainan Mancala'
+              title: 'Permainan Mancala'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/Mancala.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Mancala'
+                  payload: 
+                    type: game
+                    game: mancala
+  triviaFavoriteGameCorrect:
+    type: text
+    options:
+      text: 'Horeee jawaban kamu benar Geca! Dulu kamu dan Geka hampir setiap malam bermain permainan Mancala. Geka terkesan banget waktu kamu menang terus seneng banget sampai dipost ke Path, ah time flies so much ya :('
+
+  triviaRomanticDinnerQuestion:
+    type: text
+    options:
+      text: 'Mana tempat dinner paling romantis yang Geka dan Geca pernah datangi? Pilih pilihan di atas ini.'
+  triviaRomanticDinnerTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Dinner romantis di Skye'
+              title: 'Dinner romantis di Skye'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/skye.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Skye'
+                  payload:
+                    type: romdinner
+                    romdinner: skye
+            - text: 'Dinner romantis di Segarra'
+              title: 'Dinner romantis di Segarra'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/segarra.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Segarra'
+                  payload: 
+                    type: romdinner
+                    romdinner: segarra
+            - text: 'Iga bakar mas giri'
+              title: 'Iga bakar mas giri'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/igabakar.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Iga Bakar'
+                  payload: 
+                    type: romdinner
+                    romdinner: igabakar
+  triviaRomanticDinnerCorrect:
+    type: text
+    options:
+      text: 'Yesss! Geka ingat banget momen romantis bersama Geca di rooftop Skye dan juga saat-saat sunset indah di pantai Segarra ancol, Geku seneng deh liat kalian dinner di tempat romantis gini <3'
+
+  triviaBestMomentQuestion:
+    type: text
+    options:
+      text: 'Apa momen terbaik yang Geka dan Geca lakukan di tahun ini? Pilih pilihan di atas ini.'
+  triviaBestMomentTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Malam tahun baru 2017 di Intercon Bandung'
+              title: 'Malam tahun baru 2017'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/newyear.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Tahun Baru'
+                  payload:
+                    type: moment
+                    moment: newyear
+            - text: 'Makan martabak India di taman jajan'
+              title: 'Makan martabak India'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/martabak.jpg'
+              actions:
+                - type: "postback"
+                  label: 'Martabak'
+                  payload: 
+                    type: moment
+                    moment: martabak
+  triviaBestMomentCorrect:
+    type: text
+    options:
+      text: 'Yayyy, benar Geca! Momen paling berharga buat Geka di tahun ini adalah menghabiskan detik-detik pergantian tahun bersama kamu, bersama orang yang paling istimewa'
+
+  triviaBestPhotoQuestion:
+    type: text
+    options:
+      text: 'Mana foto terbaik yang pernah Geka dan Geca ambil? Pilih pilihan di atas ini.'
+  triviaBestPhotoTemplate:
+    type: "template"
+    options:
+        type: "carousel"
+        items:
+            - text: 'Foto sewaktu nonton Thasya di Rising Star'
+              title: 'Rising Star'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk12-1.png'
+              actions:
+                - type: "postback"
+                  label: 'Rising Star'
+                  payload:
+                    type: photo
+            - text: 'Foto di Hello Kitty Dufan'
+              title: 'Hello Kitty Dufan'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk13.png'
+              actions:
+                - type: "postback"
+                  label: 'Dufan'
+                  payload:
+                    type: photo
+            - text: 'Foto baru datang ke Jakarta waktu Natal'
+              title: 'Datang ke Jakarta'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk16.png'
+              actions:
+                - type: "postback"
+                  label: 'Natal'
+                  payload:
+                    type: photo
+            - text: 'Foto makan bareng di PizzaHut'
+              title: 'PizzaHut BXC'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk17.png'
+              actions:
+                - type: "postback"
+                  label: 'Pizza Hut'
+                  payload:
+                    type: photo
+            - text: 'Foto malam tahun baruan di Intercon Bandung'
+              title: 'Malam tahun baru 2017'
+              thumbnailImageUrl: 'https://s3-us-west-2.amazonaws.com/edu-cornell-cs-cs5300s16-gk256/ghaitsa-proj/gk11-2.png'
+              actions:
+                - type: "postback"
+                  label: 'Tahun Baru'
+                  payload:
+                    type: photo
+  triviaBestPhotoCorrect:
+    type: text
+    options:
+      text: "Kata Geka ke Geku: Mau foto yang mana saja, asalkan semua sama kamu, bakalan jadi bagus. It doesn't matter where and when, but with whom the picture is taken <3"

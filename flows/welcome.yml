@@ -1,0 +1,64 @@
+intents:
+    addAsFriend:
+        initial: true
+        type: data
+        condition: "payload.type == 'follow'"
+
+    greeting:
+        type: text
+        classifier:
+            nlu: qisg
+            match: greeting
+        priority: 10
+
+    reenter:
+        type: command
+        condition: content == 'reenter'
+
+states:
+    addAsFriend:
+        initial: true
+        action:
+            - name: greetPerson
+            - name: stickerWelcome
+        transitions:
+            greet:
+                fallback: true
+
+    greet:
+        # Normally it is tedious if we have to define a transition to a state that 
+        # is available in every state. e.g. Cancel state. To mitigate this we can define 
+        # a floating transition. The system will automatically attach this transition in 
+        # every state.
+        float:
+            fallback: true
+        action:
+            - name: greetPerson
+              condition: "!context.greetCount"
+            - name: stickerWelcome
+              condition: "!context.greetCount"
+            - name: greetAgain
+              condition: "context.greetCount >= 1"
+              
+        # Specify mapping or method to be executed when transition is started
+        # create context.greetCount or do increment
+        transit:
+            context.greetCount: "intent == 'greeting' ? (context.greetCount || 0) + 1 : 0"
+
+actions:
+    stickerWelcome:
+        type: template
+        options:
+            type: sticker
+            items:
+                stickerId: '1'
+                packageId: '119'
+    greetAgain:
+        type: text
+        options:
+            text: "Geca, apa kamu sudah siap untuk bermain bersama Geku?"
+
+    greetPerson:
+        type: text
+        options:
+            text: "Halo Geca, perkenalkan namaku Geku, robot yang akan menemani dan membuat kamu senang hari ini. Aku telah menyiapkan permainan untuk kamu, apa kamu siap?"

@@ -1,0 +1,16 @@
+# copy paste this inside kata console to test the flow
+text('hai')
+text('siap')
+button('', { type: 'dinner', dinner: 'kenny' })
+button('', { type: 'movie', movie: 'surga' })
+button('', { type: 'date', date: '1 Januari' })
+button('', { type: 'continue', continue: 'lanjut' })
+
+button('', { type: 'place', place: 'dufan' })
+button('', { type: 'geka', geka: 'cornell' })
+button('', { type: 'game', game: 'mancala' })
+button('', { type: 'continue', continue: 'lanjut' })
+
+button('', { type: 'romdinner', romdinner: 'segarra' })
+button('', { type: 'moment', moment: 'newyear' })
+button('', { type: 'photo'})
